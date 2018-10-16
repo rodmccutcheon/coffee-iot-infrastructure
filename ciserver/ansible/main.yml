@@ -1,0 +1,35 @@
+---
+- hosts: tag_role_jenkins_master
+  become: yes
+  become_method: sudo
+  remote_user: ubuntu
+
+  vars:
+    java_packages:
+      - openjdk-8-jdk
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "8080"
+    jenkins_plugins:
+      - ansicolor
+      - git
+      - sonar
+      - maven-plugin
+      - nodejs
+      - pipelines
+      - s3
+      - bitbucket
+      - slack
+      - release-helper
+
+  pre_tasks:
+    - name: Update apt cache if needed.
+      apt: update_cache=yes cache_valid_time=3600
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.java      
+    - geerlingguy.jenkins
+    - geerlingguy.git
+    - geerlingguy.ansible
+    - geerlingguy.docker
